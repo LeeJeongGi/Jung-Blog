@@ -1,5 +1,6 @@
 package com.junglog.api.controller;
 
+import com.junglog.api.domain.Post;
 import com.junglog.api.repository.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -73,5 +74,9 @@ class PostControllerTest {
 
         //then
         assertEquals(1L, postRepository.count());
+
+        Post post = postRepository.findAll().get(0);
+        assertEquals("제목입니다.", post.getTitle());
+        assertEquals("내용입니다.", post.getContent());
     }
 }
