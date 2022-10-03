@@ -1,7 +1,7 @@
 package com.junglog.api.controller;
 
 import com.junglog.api.repository.PostRepository;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ class PostControllerTest {
     @Autowired
     PostRepository postRepository;
 
-    @AfterEach
+    @BeforeEach
     void delete() {
         postRepository.deleteAll();
     }
