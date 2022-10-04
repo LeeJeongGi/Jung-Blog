@@ -1,5 +1,6 @@
 package com.junglog.api.controller;
 
+import com.junglog.api.domain.Post;
 import com.junglog.api.request.PostRequest;
 import com.junglog.api.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public Map<String, String> post(@RequestBody @Valid PostRequest request) throws Exception {
+    public void post(@RequestBody @Valid PostRequest request) throws Exception {
         postService.write(request);
-
-        return Map.of();
     }
 }

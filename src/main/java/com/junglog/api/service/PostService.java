@@ -17,7 +17,10 @@ public class PostService {
     public void write(PostRequest request) {
         // repository.save(request)
         // PostRequest -> post 로 변환
-        Post post = new Post(request.getTitle(), request.getContent());
+        Post post = Post.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
 
         postRepository.save(post);
     }
