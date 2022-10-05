@@ -74,7 +74,6 @@ class PostControllerTest {
                         .content(json)
                 )
                 .andExpect(status().isBadRequest())
-//                .andExpect(content().string("Hello World"))
                 .andExpect(jsonPath("$.code").value("400"))
                 .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
                 .andExpect(jsonPath("$.validations.title").value("타이틀을 입력해주세요."))
@@ -114,7 +113,7 @@ class PostControllerTest {
     void post_one_list() throws Exception {
         //given
         Post post = Post.builder()
-                .title("title")
+                .title("title_length_test_do")
                 .content("content")
                 .build();
 
@@ -125,7 +124,7 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(post.getId()))
-                .andExpect(jsonPath("$.title").value("title"))
+                .andExpect(jsonPath("$.title").value("title_length_test_do"))
                 .andExpect(jsonPath("$.content").value("content"))
                 .andDo(print());
 
