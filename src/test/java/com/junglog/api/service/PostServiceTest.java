@@ -3,12 +3,14 @@ package com.junglog.api.service;
 import com.junglog.api.domain.Post;
 import com.junglog.api.repository.PostRepository;
 import com.junglog.api.request.PostRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class PostServiceTest {
@@ -18,6 +20,11 @@ class PostServiceTest {
 
     @Autowired
     private PostRepository postRepository;
+
+    @BeforeEach
+    void clean() {
+        postRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("글 작성")
@@ -36,6 +43,27 @@ class PostServiceTest {
         assertEquals(1L, postRepository.count());
         assertEquals("제목입니다.", post.getTitle());
         assertEquals("내용입니다.", post.getContent());
+    }
+
+    @Test
+    @DisplayName("글 한개 조회")
+    void test2() {
+        //given
+        Post requestPost = Post.builder()
+                .title("title")
+                .content("content")
+                .build();
+
+        postRepository.save(requestPost);
+
+        //when
+        Post post = postService.get(requestPost.getId());
+
+        //then
+        assertNotNull(post);
+        assertEquals(1L, postRepository.count());
+        assertEquals("title", post.getTitle());
+        assertEquals("content", post.getContent());
     }
 
 }
