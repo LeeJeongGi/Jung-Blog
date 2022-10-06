@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -135,29 +137,24 @@ class PostControllerTest {
     @DisplayName("글 여러건 조회")
     void post_list() throws Exception {
         //given
-        Post post1 = Post.builder()
-                .title("title_length_test_do1")
-                .content("content1")
-                .build();
-
-        postRepository.save(post1);
-
-        Post post2 = Post.builder()
-                .title("title_length_test_do2")
-                .content("content2")
-                .build();
-
-        postRepository.save(post2);
+        postRepository.saveAll(List.of(
+                Post.builder()
+                    .title("title_length_test_do1")
+                    .content("content1")
+                    .build(),
+                Post.builder()
+                    .title("title_length_test_do2")
+                    .content("content2")
+                    .build()
+        ));
 
         //expected = when + then
         mockMvc.perform(get("/posts")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(2)))
-                .andExpect(jsonPath("$[0].id").value(post1.getId()))
                 .andExpect(jsonPath("$[0].title").value("title_length_test_do1"))
                 .andExpect(jsonPath("$[0].content").value("content1"))
-                .andExpect(jsonPath("$[1].id").value(post2.getId()))
                 .andExpect(jsonPath("$[1].title").value("title_length_test_do2"))
                 .andExpect(jsonPath("$[1].content").value("content2"))
                 .andDo(print());
