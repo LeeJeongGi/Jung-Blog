@@ -5,10 +5,11 @@ import com.junglog.api.request.PostRequest;
 import com.junglog.api.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,8 +30,8 @@ public class PostController {
      * /posts/{postsId} -> 한 개만 조회
      */
     @GetMapping("/posts")
-    public List<Post> getList() {
-        return postService.getList();
+    public Page<Post> getList(Pageable pageable) {
+        return postService.getList(pageable);
     }
 
     @GetMapping("/posts/{postsId}")

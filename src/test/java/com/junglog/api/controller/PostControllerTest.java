@@ -13,8 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -137,26 +138,19 @@ class PostControllerTest {
     @DisplayName("글 여러건 조회")
     void post_list() throws Exception {
         //given
-        postRepository.saveAll(List.of(
-                Post.builder()
-                    .title("title_length_test_do1")
-                    .content("content1")
-                    .build(),
-                Post.builder()
-                    .title("title_length_test_do2")
-                    .content("content2")
-                    .build()
-        ));
+        List<Post> posts = IntStream.range(0, 30)
+                .mapToObj(i -> Post.builder()
+                        .title("제목 입니다 - " + i)
+                        .content("내용 입니다 - " + i)
+                        .build())
+                .collect(Collectors.toList());
+
+        postRepository.saveAll(posts);
 
         //expected = when + then
-        mockMvc.perform(get("/posts")
+        mockMvc.perform(get("/posts?page=1&sort=id,desc")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(2)))
-                .andExpect(jsonPath("$[0].title").value("title_length_test_do1"))
-                .andExpect(jsonPath("$[0].content").value("content1"))
-                .andExpect(jsonPath("$[1].title").value("title_length_test_do2"))
-                .andExpect(jsonPath("$[1].content").value("content2"))
                 .andDo(print());
     }
 }

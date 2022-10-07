@@ -5,9 +5,9 @@ import com.junglog.api.repository.PostRepository;
 import com.junglog.api.request.PostRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -34,7 +34,7 @@ public class PostService {
         return post;
     }
 
-    public List<Post> getList() {
-        return postRepository.findAll();
+    public Page<Post> getList(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 }
