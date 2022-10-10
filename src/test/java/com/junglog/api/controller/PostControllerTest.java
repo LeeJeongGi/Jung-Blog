@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -139,7 +139,7 @@ class PostControllerTest {
     @DisplayName("글 여러건 조회")
     void post_list() throws Exception {
         //given
-        List<Post> posts = IntStream.range(0, 30)
+        List<Post> posts = IntStream.range(0, 20)
                 .mapToObj(i -> Post.builder()
                         .title("제목 입니다 - " + i)
                         .content("내용 입니다 - " + i)
@@ -149,13 +149,35 @@ class PostControllerTest {
         postRepository.saveAll(posts);
 
         //expected = when + then
-        mockMvc.perform(get("/posts?page=1&sort=id,desc")
+        mockMvc.perform(get("/posts?page=1&size=10")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(5)))
-                .andExpect(jsonPath("$.content[0].id").value(30))
-                .andExpect(jsonPath("$.content[0].title").value("제목 입니다 - 29"))
-                .andExpect(jsonPath("$.content[0].content").value("내용 입니다 - 29"))
+                .andExpect(jsonPath("$.length()", is(10)))
+                .andExpect(jsonPath("$[0].title").value("제목 입니다 - 19"))
+                .andExpect(jsonPath("$[0].content").value("내용 입니다 - 19"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("페이지를 0으로 요청하면 첫 페이지를 가져온다.")
+    void post_page_zero_list() throws Exception {
+        //given
+        List<Post> posts = IntStream.range(0, 20)
+                .mapToObj(i -> Post.builder()
+                        .title("제목 입니다 - " + i)
+                        .content("내용 입니다 - " + i)
+                        .build())
+                .collect(Collectors.toList());
+
+        postRepository.saveAll(posts);
+
+        //expected = when + then
+        mockMvc.perform(get("/posts?page=0&size=10")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(10)))
+                .andExpect(jsonPath("$[0].title").value("제목 입니다 - 19"))
+                .andExpect(jsonPath("$[0].content").value("내용 입니다 - 19"))
                 .andDo(print());
     }
 }

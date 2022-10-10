@@ -2,14 +2,14 @@ package com.junglog.api.controller;
 
 import com.junglog.api.domain.Post;
 import com.junglog.api.request.PostRequest;
+import com.junglog.api.request.PostSearch;
 import com.junglog.api.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -30,8 +30,8 @@ public class PostController {
      * /posts/{postsId} -> 한 개만 조회
      */
     @GetMapping("/posts")
-    public Page<Post> getList(Pageable pageable) {
-        return postService.getList(pageable);
+    public List<Post> getList(@ModelAttribute PostSearch postSearch) {
+        return postService.getList(postSearch);
     }
 
     @GetMapping("/posts/{postsId}")

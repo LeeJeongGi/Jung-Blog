@@ -3,12 +3,12 @@ package com.junglog.api.service;
 import com.junglog.api.domain.Post;
 import com.junglog.api.repository.PostRepository;
 import com.junglog.api.request.PostRequest;
+import com.junglog.api.request.PostSearch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -78,7 +78,7 @@ class PostServiceTest {
     @DisplayName("글 여러건 조회(페이징 기능)")
     void test3() {
         //given
-        List<Post> requestPosts = IntStream.range(0, 30)
+        List<Post> requestPosts = IntStream.range(0, 20)
                 .mapToObj(i -> Post.builder()
                         .title("이정기 제목 - " + i)
                         .content("이정기 내용 - " + i)
@@ -87,16 +87,18 @@ class PostServiceTest {
 
         postRepository.saveAll(requestPosts);
 
-        Pageable pageable = PageRequest.of(0, 5, Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(0, 10, Direction.DESC, "id");
+        PostSearch postSearch = PostSearch.builder()
+                .page(1)
+                .build();
 
         //when
-        Page<Post> posts = postService.getList(pageable);
+        List<Post> posts = postService.getList(postSearch);
 
         //then
-        assertEquals(5, posts.stream().count());
+        assertEquals(10, posts.size());
 
-        List<Post> content = posts.getContent();
-        assertEquals("이정기 제목 - 29", content.get(0).getTitle());
-        assertEquals("이정기 내용 - 29", content.get(0).getContent());
+        assertEquals("이정기 제목 - 19", posts.get(0).getTitle());
+        assertEquals("이정기 내용 - 19", posts.get(0).getContent());
     }
 }
