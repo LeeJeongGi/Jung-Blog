@@ -19,6 +19,10 @@ public class ExceptionController {
     @ResponseBody
     public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
 
+        /**
+         * ControllerAdvice 를 통해 에러를 한곳에서 관리
+         */
+
         // MethodArgumentNotValidException
         ErrorResponse response = ErrorResponse.builder()
                 .code("400")
