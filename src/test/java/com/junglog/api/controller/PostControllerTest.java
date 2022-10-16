@@ -3,6 +3,7 @@ package com.junglog.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junglog.api.domain.Post;
 import com.junglog.api.repository.PostRepository;
+import com.junglog.api.request.PostEdit;
 import com.junglog.api.request.PostRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +20,7 @@ import java.util.stream.IntStream;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -178,6 +178,31 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.length()", is(10)))
                 .andExpect(jsonPath("$[0].title").value("제목 입니다 - 19"))
                 .andExpect(jsonPath("$[0].content").value("내용 입니다 - 19"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void update_test() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("title")
+                .content("contest")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("update Title")
+                .content("contest")
+                .build();
+
+        //expected = when + then
+        mockMvc.perform(patch("/posts/{postId}", post.getId()) //PATCH /posts/{postId}
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit))
+                )
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }

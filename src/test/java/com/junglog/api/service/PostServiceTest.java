@@ -2,6 +2,7 @@ package com.junglog.api.service;
 
 import com.junglog.api.domain.Post;
 import com.junglog.api.repository.PostRepository;
+import com.junglog.api.request.PostEdit;
 import com.junglog.api.request.PostRequest;
 import com.junglog.api.request.PostSearch;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,5 +101,59 @@ class PostServiceTest {
 
         assertEquals("이정기 제목 - 19", posts.get(0).getTitle());
         assertEquals("이정기 내용 - 19", posts.get(0).getContent());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void edit_title_test() {
+        //given
+        Post post = Post.builder()
+                .title("title")
+                .content("contest")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("update Title")
+                .content("contest")
+                .build();
+
+        //when
+        postService.edit(post.getId(), postEdit);
+
+        //then
+        Post changePost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재 하지 않습니다. id = " + post.getId()));
+
+        assertEquals("update Title", changePost.getTitle());
+        assertEquals("contest", changePost.getContent());
+    }
+
+    @Test
+    @DisplayName("글 내용 수정")
+    void edit_content_test() {
+        //given
+        Post post = Post.builder()
+                .title("title")
+                .content("contest")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("title")
+                .content("update contest")
+                .build();
+
+        //when
+        postService.edit(post.getId(), postEdit);
+
+        //then
+        Post changePost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재 하지 않습니다. id = " + post.getId()));
+
+        assertEquals("title", changePost.getTitle());
+        assertEquals("update contest", changePost.getContent());
     }
 }

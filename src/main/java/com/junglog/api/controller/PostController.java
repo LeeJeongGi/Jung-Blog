@@ -1,6 +1,7 @@
 package com.junglog.api.controller;
 
 import com.junglog.api.domain.Post;
+import com.junglog.api.request.PostEdit;
 import com.junglog.api.request.PostRequest;
 import com.junglog.api.request.PostSearch;
 import com.junglog.api.service.PostService;
@@ -39,5 +40,10 @@ public class PostController {
         Post post = postService.get(id);
 
         return post;
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public void update(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        postService.edit(postId, request);
     }
 }
