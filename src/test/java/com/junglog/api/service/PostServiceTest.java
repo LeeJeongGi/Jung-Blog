@@ -115,8 +115,8 @@ class PostServiceTest {
         postRepository.save(post);
 
         PostEdit postEdit = PostEdit.builder()
-                .title("update Title")
-                .content("contest")
+                .title("update title")
+                .content(null)
                 .build();
 
         //when
@@ -126,7 +126,7 @@ class PostServiceTest {
         Post changePost = postRepository.findById(post.getId())
                 .orElseThrow(() -> new RuntimeException("글이 존재 하지 않습니다. id = " + post.getId()));
 
-        assertEquals("update Title", changePost.getTitle());
+        assertEquals("update title", changePost.getTitle());
         assertEquals("contest", changePost.getContent());
     }
 
@@ -142,7 +142,7 @@ class PostServiceTest {
         postRepository.save(post);
 
         PostEdit postEdit = PostEdit.builder()
-                .title("title")
+                .title(null)
                 .content("update contest")
                 .build();
 
