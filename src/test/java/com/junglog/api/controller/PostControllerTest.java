@@ -38,7 +38,7 @@ class PostControllerTest {
     PostRepository postRepository;
 
     @BeforeEach
-    void delete() {
+    void deleteAfter() {
         postRepository.deleteAll();
     }
 
@@ -202,6 +202,23 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postEdit))
                 )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("/delete 요청시 정상적으로 삭제 테스트")
+    void delete_test() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("title")
+                .content("content")
+                .build();
+        postRepository.save(post);
+
+        // expected
+        mockMvc.perform(delete("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
