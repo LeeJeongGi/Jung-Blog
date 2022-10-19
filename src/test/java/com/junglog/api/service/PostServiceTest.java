@@ -1,6 +1,7 @@
 package com.junglog.api.service;
 
 import com.junglog.api.domain.Post;
+import com.junglog.api.exception.PostNotFound;
 import com.junglog.api.repository.PostRepository;
 import com.junglog.api.request.PostEdit;
 import com.junglog.api.request.PostRequest;
@@ -18,8 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class PostServiceTest {
@@ -56,7 +56,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("글 한개 조회")
-    void test2() {
+    void post_list_test() {
         //given
         Post requestPost = Post.builder()
                 .title("title")
@@ -76,8 +76,26 @@ class PostServiceTest {
     }
 
     @Test
+    @DisplayName("글 한개 조회햇을 때 예외 처리")
+    void test_exception() {
+        //given
+        Post post = Post.builder()
+                .title("title")
+                .content("content")
+                .build();
+
+        postRepository.save(post);
+
+        //expected
+        assertThrows(PostNotFound.class, () -> {
+            postService.get(post.getId() + 1L);
+        });
+
+    }
+
+    @Test
     @DisplayName("글 여러건 조회(페이징 기능)")
-    void test3() {
+    void list_post() {
         //given
         List<Post> requestPosts = IntStream.range(0, 20)
                 .mapToObj(i -> Post.builder()
@@ -158,6 +176,28 @@ class PostServiceTest {
     }
 
     @Test
+    @DisplayName("글 내용 수정 에러 테스트")
+    void edit_content_error_test() {
+        //given
+        Post post = Post.builder()
+                .title("title")
+                .content("contest")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title(null)
+                .content("update contest")
+                .build();
+
+        //expected
+        assertThrows(PostNotFound.class, () -> {
+            postService.edit(post.getId() + 1, postEdit);
+        });
+    }
+
+    @Test
     @DisplayName("게시글 삭제")
     void delete_test () {
         //given
@@ -173,5 +213,22 @@ class PostServiceTest {
 
         //then
         assertEquals(0, postRepository.count());
+    }
+
+    @Test
+    @DisplayName("게시글 에러 테스트")
+    void delete_error_test() {
+        //given
+        Post post = Post.builder()
+                .title("title")
+                .content("content")
+                .build();
+
+        postRepository.save(post);
+
+        //expected
+        assertThrows(PostNotFound.class, () -> {
+            postService.delete(post.getId() + 1L);
+        });
     }
 }

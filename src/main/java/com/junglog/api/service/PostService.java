@@ -2,6 +2,7 @@ package com.junglog.api.service;
 
 import com.junglog.api.domain.Post;
 import com.junglog.api.domain.PostEditor;
+import com.junglog.api.exception.PostNotFound;
 import com.junglog.api.repository.PostRepository;
 import com.junglog.api.request.PostEdit;
 import com.junglog.api.request.PostRequest;
@@ -33,7 +34,7 @@ public class PostService {
 
     public Post get(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(PostNotFound::new);
 
         return post;
     }
@@ -45,7 +46,7 @@ public class PostService {
     @Transactional
     public void edit(Long id, PostEdit postEdit) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다"));
+                .orElseThrow(PostNotFound::new);
 
         PostEditor.PostEditorBuilder postEditorBuilder = post.toEditor();
 
@@ -60,7 +61,7 @@ public class PostService {
 
     public void delete(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다"));
+                .orElseThrow(PostNotFound::new);
 
         postRepository.delete(post);
     }
