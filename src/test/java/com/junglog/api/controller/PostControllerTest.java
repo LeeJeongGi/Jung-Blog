@@ -209,17 +209,11 @@ class PostControllerTest {
     @Test
     @DisplayName("/delete 요청시 정상적으로 삭제 테스트")
     void delete_test() throws Exception {
-        //given
-        Post post = Post.builder()
-                .title("title")
-                .content("content")
-                .build();
-        postRepository.save(post);
 
         // expected
-        mockMvc.perform(delete("/posts/{postId}", post.getId())
+        mockMvc.perform(delete("/posts/{postId}", 1L)
                         .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 }

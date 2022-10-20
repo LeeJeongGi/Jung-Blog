@@ -1,5 +1,6 @@
 package com.junglog.api.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ import java.util.Map;
  * }
  */
 @Getter
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY) // 비어 있는 값은 내려가지 않도록 설정하는 코드
 public class ErrorResponse {
 
     private final String code;
