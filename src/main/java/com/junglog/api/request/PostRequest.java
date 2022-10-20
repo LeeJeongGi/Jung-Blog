@@ -1,5 +1,6 @@
 package com.junglog.api.request;
 
+import com.junglog.api.exception.InvalidRequest;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -26,5 +27,11 @@ public class PostRequest {
     public PostRequest(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void validate() {
+        if (this.title.contains("바보")) {
+            throw new InvalidRequest("title", "제목에 바보를 입력 할 수 없습니다.");
+        }
     }
 }

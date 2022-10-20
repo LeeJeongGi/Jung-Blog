@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,12 +23,13 @@ public class ErrorResponse {
     private final String message;
 
     //Map 으로 되어 있어서 ㅈ금 찝찝하다.... 클래스로 수정해보자
-    private final Map<String , String > validations = new HashMap<>();
+    private final Map<String , String > validations;
 
     @Builder
-    public ErrorResponse(String code, String message) {
+    public ErrorResponse(String code, String message, Map<String, String > validations) {
         this.code = code;
         this.message = message;
+        this.validations = validations;
     }
 
     public void addValidation(String fieldName, String errorMessage) {

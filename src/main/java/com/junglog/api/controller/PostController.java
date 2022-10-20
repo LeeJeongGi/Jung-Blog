@@ -23,6 +23,8 @@ public class PostController {
 
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostRequest request) throws Exception {
+        request.validate();
+
         postService.write(request);
     }
 
