@@ -43,29 +43,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 정상적으로 호출되는지 테스트")
-    void call_test() throws Exception {
-        //given
-        PostRequest request = PostRequest.builder()
-                .title("제목입니다.")
-                .content("내용입니다.")
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        // expected
-        mockMvc.perform(post("/posts")
-                        .contentType(APPLICATION_JSON)
-                        .content(json)
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().string(""))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("/posts 요청시 title 값은 필수다")
-    void error_test() throws Exception {
+    @DisplayName("필수 값 채워지지 않았을 때 에러 발생하는지 테스트 케이스")
+    void create_error_test() throws Exception {
         //given
         PostRequest request = PostRequest.builder()
                 .content("내용입니다.")
@@ -86,8 +65,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 DB에 값이 저장된다")
-    void save_db_test() throws Exception {
+    @DisplayName("게시글 작성 테스트 케이스")
+    void create_test() throws Exception {
         //given
         PostRequest request = PostRequest.builder()
                 .title("제목입니다.")
@@ -114,11 +93,11 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 한개 조회")
-    void post_one_list() throws Exception {
+    @DisplayName("특정 게시글 조회하는 테스트 케이스")
+    void readPost() throws Exception {
         //given
         Post post = Post.builder()
-                .title("title_length_test_do")
+                .title("title")
                 .content("content")
                 .build();
 
@@ -129,15 +108,14 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(post.getId()))
-                .andExpect(jsonPath("$.title").value("title_length_test_do"))
+                .andExpect(jsonPath("$.title").value("title"))
                 .andExpect(jsonPath("$.content").value("content"))
                 .andDo(print());
-
     }
 
     @Test
-    @DisplayName("글 여러건 조회")
-    void post_list() throws Exception {
+    @DisplayName("게시글 목록 조회 테스트 케이스")
+    void readPosts() throws Exception {
         //given
         List<Post> posts = IntStream.range(0, 20)
                 .mapToObj(i -> Post.builder()
@@ -159,8 +137,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("페이지를 0으로 요청하면 첫 페이지를 가져온다.")
-    void post_page_zero_list() throws Exception {
+    @DisplayName("페이지를 0으로 요청하면 첫 페이지를 가져온다. - pageDefault 설정으로 인해 0 -> 1로 처리")
+    void readPostsPageTest() throws Exception {
         //given
         List<Post> posts = IntStream.range(0, 20)
                 .mapToObj(i -> Post.builder()
@@ -182,8 +160,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 제목 수정")
-    void update_test() throws Exception {
+    @DisplayName("게시글 제목 수정 테스트 케이스")
+    void updatePost() throws Exception {
         //given
         Post post = Post.builder()
                 .title("title")
@@ -207,9 +185,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/delete 요청시 정상적으로 삭제 테스트")
-    void delete_error_test() throws Exception {
-
+    @DisplayName("존재하지 않는 게시글 삭제 시 에러 발생 테스트 케이스")
+    void deletePostErrorTest() throws Exception {
         // expected
         mockMvc.perform(delete("/posts/{postId}", 1L)
                         .contentType(APPLICATION_JSON))
@@ -218,8 +195,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 게시글 수정")
-    void update_error_test() throws Exception {
+    @DisplayName("존재하지 않는 게시글 수정 시 에러 발생 테스트 케이스")
+    void updatePostErrorTest() throws Exception {
         //given
         PostEdit postEdit = PostEdit.builder()
                 .title("update Title")
@@ -236,8 +213,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("게시글 작성 시 바보는 포함될수 없다.")
-    void create_invalid_test() throws Exception {
+    @DisplayName("게시글 작성 시 바보는 포함될수 없다. -> 임시로 이런 요청이 있을 때 어떤 방법으로 에러를 처리해야되는지 샘플 테스트")
+    void requestPostError() throws Exception {
         //given
         PostRequest request = PostRequest.builder()
                 .title("나는 바보입니다.")

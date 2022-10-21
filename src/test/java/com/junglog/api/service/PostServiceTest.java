@@ -36,8 +36,8 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 작성")
-    void createTest() {
+    @DisplayName("게시글 작성 테스트 케이스")
+    void createPost() {
         //given
         PostRequest postRequest = PostRequest.builder()
                 .title("제목입니다.")
@@ -55,8 +55,8 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 한개 조회")
-    void post_list_test() {
+    @DisplayName("특정 게시글 조회하는 테스트 케이스")
+    void readPost() {
         //given
         Post requestPost = Post.builder()
                 .title("title")
@@ -76,8 +76,8 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 한개 조회햇을 때 예외 처리")
-    void test_exception() {
+    @DisplayName("존재하지 않는 게시글 조회시 에러 발생 테스트 케이스")
+    void readPostError() {
         //given
         Post post = Post.builder()
                 .title("title")
@@ -94,8 +94,8 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 여러건 조회(페이징 기능)")
-    void list_post() {
+    @DisplayName("게시글 조회하는 테스트 케이스")
+    void readPosts() {
         //given
         List<Post> requestPosts = IntStream.range(0, 20)
                 .mapToObj(i -> Post.builder()
@@ -122,8 +122,8 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 제목 수정")
-    void edit_title_test() {
+    @DisplayName("게시글 제목 수정하는 테스트 케이스")
+    void updateTitlePost() {
         //given
         Post post = Post.builder()
                 .title("title")
@@ -149,8 +149,8 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 내용 수정")
-    void edit_content_test() {
+    @DisplayName("게시글 내용 수정하는 테스트 케이스")
+    void updateContentPost() {
         //given
         Post post = Post.builder()
                 .title("title")
@@ -176,8 +176,8 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 내용 수정 에러 테스트")
-    void edit_content_error_test() {
+    @DisplayName("존재하지 않는 게시글 내용 수정시 에러 발생하는 테스트 케이스")
+    void notFoundPostUpdateError() {
         //given
         Post post = Post.builder()
                 .title("title")
@@ -198,8 +198,8 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 삭제")
-    void delete_test () {
+    @DisplayName("게시글 삭제하는 테스트 케이스")
+    void deletePost() {
         //given
         Post post = Post.builder()
                 .title("title")
@@ -216,8 +216,8 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 에러 테스트")
-    void delete_error_test() {
+    @DisplayName("존재 하지 않는 게시글 조회 시 발생하는 에러 테스트 케이스")
+    void notFoundPostReadError() {
         //given
         Post post = Post.builder()
                 .title("title")
