@@ -22,7 +22,6 @@ public class ErrorResponse {
     private final String code;
     private final String message;
 
-    //Map 으로 되어 있어서 ㅈ금 찝찝하다.... 클래스로 수정해보자
     private final Map<String , String > validations;
 
     @Builder
