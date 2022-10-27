@@ -40,15 +40,8 @@ public class PostControllerDocTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-//    @BeforeEach
-//    public void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
-//        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-//                .apply(documentationConfiguration(restDocumentation))
-//                .build();
-//    }
-
     @Test
-    @DisplayName("글 단건 조회 테스트")
+    @DisplayName("글 단건 조회 테스트 - docs 생성 위한 작업")
     void sample_test() throws Exception {
         //given
         Post post = Post.builder()
@@ -75,7 +68,7 @@ public class PostControllerDocTest {
     }
 
     @Test
-    @DisplayName("글 등록 테스트")
+    @DisplayName("글 등록 테스트 - docs 생성 위한 작업")
     void create_test() throws Exception {
         //given
         PostRequest request = PostRequest.builder()
