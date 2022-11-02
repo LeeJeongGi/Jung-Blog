@@ -212,6 +212,7 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+
     @Test
     @DisplayName("게시글 작성 시 바보는 포함될수 없다. -> 임시로 이런 요청이 있을 때 어떤 방법으로 에러를 처리해야되는지 샘플 테스트")
     void requestPostError() throws Exception {
