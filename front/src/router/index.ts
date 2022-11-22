@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import ReadView from "../views/ReadView.vue";
 import WriteView from "../views/WriteView.vue";
 
 const router = createRouter({
@@ -14,6 +15,12 @@ const router = createRouter({
       path: "/write",
       name: "write",
       component: WriteView,
+    },
+    {
+      path: "/read/:postId",
+      name: "read",
+      component: ReadView,
+      props:true,
     },
     // {
     //   path: "/about",
