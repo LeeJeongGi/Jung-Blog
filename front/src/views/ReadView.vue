@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineProps, onMounted, ref} from "vue";
+import { defineProps, onMounted, ref } from "vue";
 import axios from "axios";
 
 const props = defineProps({
@@ -15,16 +15,17 @@ const post = ref({
   content: "",
 });
 
-
 // onMounted(() =>{
 //   console.log(props.postId)
-//   axios.get('/api/posts').then((response) => {
+//   axios.get('/api/posts'/${props.postId).then((response) => {
 //     post.value = response.data;
 //   });
 // });
 </script>
 
 <template>
-  <h2>{{post.title}}</h2>
-  <div>{{post.content}}</div>
+  <h2>{{ post.title }}</h2>
+  <div>{{ post.content }}</div>
+
+  <el-button>수정</el-button>
 </template>
