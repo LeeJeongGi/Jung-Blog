@@ -21,11 +21,20 @@ public class PostController {
     // GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD, TRACE, CONNECT
     private final PostService postService;
 
+    @GetMapping("/test")
+    public String  test() {
+        return "hello";
+    }
+
+    @GetMapping("/foo")
+    public String  foo() {
+        return "foo";
+    }
+
     @PostMapping("/posts")
     public void write(@RequestBody @Valid PostRequest request) {
-        request.validate();
-
-        postService.write(request);
+            request.validate();
+            postService.write(request);
     }
 
     /**
@@ -47,6 +56,7 @@ public class PostController {
     @PatchMapping("/posts/{postId}")
     public void update(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
         postService.edit(postId, request);
+
     }
 
     @DeleteMapping("/posts/{postId}")
