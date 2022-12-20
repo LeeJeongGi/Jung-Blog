@@ -1,5 +1,6 @@
 package com.junglog.api.controller;
 
+import com.junglog.api.config.data.UserSession;
 import com.junglog.api.domain.Post;
 import com.junglog.api.request.PostEdit;
 import com.junglog.api.request.PostRequest;
@@ -21,14 +22,18 @@ public class PostController {
     // GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD, TRACE, CONNECT
     private final PostService postService;
 
-    @GetMapping("/test")
-    public String  test() {
-        return "hello";
+    @GetMapping("/foo")
+    public String foo(UserSession userSession) {
+
+        log.info(">>> {}", userSession.name);
+
+        return userSession.name;
     }
 
-    @GetMapping("/foo")
-    public String  foo() {
-        return "foo";
+    @GetMapping("/bar")
+    public String bar() {
+
+        return "인증이 필요 없는 페이지";
     }
 
     @PostMapping("/posts")
