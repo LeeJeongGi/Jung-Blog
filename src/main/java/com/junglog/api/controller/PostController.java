@@ -23,11 +23,11 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/foo")
-    public String foo(UserSession userSession) {
+    public Long foo(UserSession userSession) {
 
-        log.info(">>> {}", userSession.name);
+        log.info(">>> {}", userSession.id);
 
-        return userSession.name;
+        return userSession.id;
     }
 
     @GetMapping("/bar")
